@@ -80,7 +80,15 @@ const doConfig = async(params) => {
     lifecycle.push(convertObjectKey(lc))
   }
   console.log(JSON.stringify(lifecycle))
+  await oss.deleteBucketLifecycle(bucket)
   await oss.putBucketLifecycle(bucket, lifecycle)
+
+  // logging
+  let logging = params.logging
+  await oss.deleteBucketLogging(bucket)
+  if (logging.Enable === true) {
+    await oss.putBucketLogging(bucket, logging.TargetPrefix)
+  }
 }
 
 const doObject = async(inputParams) => {

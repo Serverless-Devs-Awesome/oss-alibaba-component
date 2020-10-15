@@ -69,9 +69,9 @@ OSSDemoComponent:
         Resource:
           - acs:oss:*:1234567890:*/*
     Logging:
-      Enable: true/false
-      TargetBucket: TargetBucket
-      TargetPrefix: TargetPrefix
+      Enable: false # true/false
+#      TargetBucket: TargetBucket # nodejs 提供的sdk中，不支持指定targetBucket，只能使用自身bucket
+      TargetPrefix: foo/
     EncryptionRule:
       SSEAlgorithm: AES256
       KMSMasterKeyID: KMSMasterKeyID

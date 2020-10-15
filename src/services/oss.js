@@ -154,6 +154,33 @@ class OssClient {
     }
   }
 
+  async putBucketLogging(bucket, prefix) {
+    try {
+      let result = await this.ossClient.putBucketLogging(bucket, prefix)
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async getBucketLogging(bucket) {
+    try {
+      let result = await this.ossClient.getBucketLogging(bucket)
+      console.log(JSON.stringify(result.res.data.toString()))
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async deleteBucketLogging(bucket) {
+    try {
+      let result = await this.ossClient.deleteBucketLogging(bucket)
+      // console.log(result);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
 }
 
 module.exports = OssClient
