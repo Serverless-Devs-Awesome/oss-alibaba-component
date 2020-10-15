@@ -34,39 +34,39 @@ class OssClient {
   // 创建存储空间
   async putBucket(bucketName, options) {
     try {
-      await this.ossClient.putBucket(bucketName, options);
+      await this.ossClient.putBucket(bucketName, options)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 
   // 设置Bucket标签
   async putBucketTags(bucketName, tag) {
     try {
-      let result = await this.ossClient.putBucketTags(bucketName, tag);
+      let result = await this.ossClient.putBucketTags(bucketName, tag)
       // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   //获取Bucket标签
   async getBucketTags(bucketName) {
     try {
-      let result = await this.ossClient.getBucketTags(bucketName);
-      // console.log(result);
+      let result = await this.ossClient.getBucketTags(bucketName)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   // 删除Bucket标签
   async deleteBucketTags(bucketName) {
     try {
-      let result = await this.ossClient.deleteBucketTags(bucketName);
-      // console.log(result);
+      let result = await this.ossClient.deleteBucketTags(bucketName)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
@@ -77,7 +77,7 @@ class OssClient {
 
   async putBucketCORS (bucket, options) {
     try {
-      await this.ossClient.putBucketCORS(bucket, options).then((result) => {});
+      await this.ossClient.putBucketCORS(bucket, options).then((result) => {})
     } catch (e) {
       console.log(e)
     }
@@ -86,6 +86,33 @@ class OssClient {
   async deleteBucketCORS(bucket) {
     try {
       await this.ossClient.deleteBucketCORS(bucket)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async putBucketReferer(bucket, allowEmptyReferer, options) {
+    try {
+      let result = await this.ossClient.putBucketReferer(bucket, allowEmptyReferer, options)
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async getBucketReferer(bucket) {
+    try {
+      let result = await this.ossClient.getBucketReferer(bucket)
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async deleteBucketReferer(bucket) {
+    try {
+      let result = await this.ossClient.deleteBucketReferer(bucket)
+      // console.log(result)
     } catch (e) {
       console.log(e)
     }

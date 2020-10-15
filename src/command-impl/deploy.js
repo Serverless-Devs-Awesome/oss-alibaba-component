@@ -75,6 +75,11 @@ const doConfig = async(params) => {
         responseVary : c.ResponseVary,})
   }
   await oss.putBucketCORS(bucket, options)
+
+  // Referer
+  await oss.deleteBucketReferer(bucket)
+  await oss.putBucketReferer(bucket, params.referer.AllowEmptyReferer, params.referer.List)
+
 }
 
 const doObject = async(inputParams) => {

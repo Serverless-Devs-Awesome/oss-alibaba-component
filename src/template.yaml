@@ -5,6 +5,8 @@ OSSDemoComponent:
   Properties:
     Region: 'cn-hangzhou'
     Bucket: baiji-oss-test
+    StorageClass: standard
+    DataRedundancyType: LRS
     #    CodeUri: 本地路径
     CodeUri:
       Src: 本地路径
@@ -19,8 +21,6 @@ OSSDemoComponent:
         Value: bbb
       - Key: cc
         Value: ddd
-    StorageClass: standard
-    DataRedundancyType: LRS
     Cors:
       - AllowedOrigin:
           - http://www.a.com
@@ -36,9 +36,10 @@ OSSDemoComponent:
         MaxAgeSeconds: 100
         ResponseVary: true
     Referer:
-      AllowEmptyReferer: true
+      AllowEmptyReferer: false
       List:
         - http://www.aliyun.com
+        - http://www.prettyzxx.com
     Acl: public-read-write
     Lifecycle:
       - ID: aa
