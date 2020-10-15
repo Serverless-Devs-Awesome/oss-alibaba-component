@@ -80,6 +80,9 @@ const doConfig = async(params) => {
   await oss.deleteBucketReferer(bucket)
   await oss.putBucketReferer(bucket, params.referer.AllowEmptyReferer, params.referer.List)
 
+  // acl
+  await oss.putBucketACL(bucket, params.acl)
+
 }
 
 const doObject = async(inputParams) => {

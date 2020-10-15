@@ -118,6 +118,26 @@ class OssClient {
     }
   }
 
+  async putBucketACL(bucket, acl) {
+    // 此处以创建Bucket后修改其访问权限为private为例。
+    try {
+      await this.ossClient.putBucketACL(bucket, acl)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // 获取存储空间的访问权限
+  async getBucketAcl(bucket) {
+    try {
+      const result = await this.ossClient.getBucketACL(bucket)
+      return result.acl
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
 }
 
 module.exports = OssClient

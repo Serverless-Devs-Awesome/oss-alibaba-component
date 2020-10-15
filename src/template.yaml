@@ -40,7 +40,7 @@ OSSDemoComponent:
       List:
         - http://www.aliyun.com
         - http://www.prettyzxx.com
-    Acl: public-read-write
+    Acl: public-read # public-read-write/private/public-read
     Lifecycle:
       - ID: aa
         Prefix: Prefix
