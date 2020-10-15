@@ -137,6 +137,22 @@ class OssClient {
     }
   }
 
+  async putBucketLifecycle(bucket, options) {
+    try {
+     return await this.ossClient.putBucketLifecycle(bucket, options)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async deleteBucketLifecycle(bucket) {
+    try {
+      return await this.ossClient.deleteBucketLifecycle(bucket)
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
 }
 

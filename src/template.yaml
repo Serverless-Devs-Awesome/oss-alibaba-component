@@ -42,24 +42,24 @@ OSSDemoComponent:
         - http://www.prettyzxx.com
     Acl: public-read # public-read-write/private/public-read
     Lifecycle:
-      - ID: aa
-        Prefix: Prefix
-        Status: Status
+      - Id: 'rule1'
+        Prefix: 'foo/'
+        Status: 'Enabled'
         Expiration:
-          Days: Days
-        Transition:
-          Days: Days
-          CreatedBeforeDate: CreatedBeforeDate
-          StorageClass: StorageClass
-        AbortMultipartUpload:
-          Days: Days
-          CreatedBeforeDate: CreatedBeforeDate
-        Tag:
-          - Key: Key
-            Value: Value
-        NoncurrentVersionTransition:
-          NoncurrentDays: 10
-          StorageClass: IA
+          Days: 21
+#        Transition:
+#          Days: 3
+#          CreatedBeforeDate: '2020-10-18T00:00:00.000Z'
+#          StorageClass: 'IA'
+#        AbortMultipartUpload:
+#          Days: 3
+#          CreatedBeforeDate: '2020-10-18T00:00:00.000Z'
+#        Tag:
+#          - Key: k1
+#            Value: v1
+#        NoncurrentVersionTransition:
+#          NoncurrentDays: 10
+#          StorageClass: 'IA'
     Policy:
       - Actions:
           - oss:PutObject

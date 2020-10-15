@@ -64,16 +64,7 @@ const doConfig = async(params) => {
 
   // CORS
   await oss.deleteBucketCORS(bucket)
-  let options = []
-  for (const c of params.cors) {
-    options.push({
-        allowedOrigin : c.AllowedOrigin,
-        allowedHeader : c.AllowedHeader,
-        allowedMethod : c.AllowedMethod,
-        exposeHeader : c.ExposeHeader,
-        maxAgeSeconds : c.MaxAgeSeconds,
-        responseVary : c.ResponseVary,})
-  }
+  let options = convertObjectKey(params.cors)
   await oss.putBucketCORS(bucket, options)
 
   // Referer
@@ -83,10 +74,39 @@ const doConfig = async(params) => {
   // acl
   await oss.putBucketACL(bucket, params.acl)
 
+  // lifecycle
+  let lifecycle = []
+  for (const lc of params.lifecycle) {
+    lifecycle.push(convertObjectKey(lc))
+  }
+  console.log(JSON.stringify(lifecycle))
+  await oss.putBucketLifecycle(bucket, lifecycle)
 }
 
 const doObject = async(inputParams) => {
 
+}
+
+function convertObjectKey(obj) {
+  if (typeof obj == 'object' && obj.constructor === Array) {
+    for (let i = 0; i < obj.length; i++) {
+      if (typeof(obj[i]) === 'object') {
+        obj[i] = convertObjectKey(obj[i])
+      }
+    }
+    return obj
+  } else {
+    if(typeof(obj) === 'object'){
+      for (var key in obj){
+        if (typeof(obj[key]) === 'object') {
+          obj[key] = convertObjectKey(obj[key])
+        }
+        obj[key.substring(0,1).toLowerCase()+key.substring(1)] = obj[key];
+        delete(obj[key]);
+      }
+      return obj;
+    }
+  }
 }
 
 module.exports = {
