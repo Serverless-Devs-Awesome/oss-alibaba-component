@@ -1,0 +1,119 @@
+OSSComponent:
+  Component: oss
+  Provider: alibaba
+  Properties:
+    Region: 'cn-hangzhou'
+    Bucket: MybucketName
+    #    CodeUri: 本地路径
+    CodeUri:
+      Src: 本地路径
+      Excludes:
+        - path1
+        - path2
+      Includes:
+        - path1
+        - path2
+    Tags:
+      - Key: aa
+        Vaule: bbb
+    StorageClass: standard
+    Cors:
+      - AllowedOrigin:
+          - http://www.a.com
+          - http://www.b.com
+        AllowedMethod:
+          - POST
+          - GET
+        AllowedHeader:
+          - Authorization
+        ExposeHeader:
+          - x-oss-test
+          - x-oss-test1
+        MaxAgeSeconds: 100
+        ResponseVary: true
+    Referer:
+      AllowEmptyReferer: true
+      List:
+        - http://www.aliyun.com
+    Acl: public-read-write
+    Lifecycle:
+      - ID: aa
+        Prefix: Prefix
+        Status: Status
+        Expiration:
+          Days: Days
+        Transition:
+          Days: Days
+          CreatedBeforeDate: CreatedBeforeDate
+          StorageClass: StorageClass
+        AbortMultipartUpload:
+          Days: Days
+          CreatedBeforeDate: CreatedBeforeDate
+        Tag:
+          - Key: Key
+            Value: Value
+        NoncurrentVersionTransition:
+          NoncurrentDays: 10
+          StorageClass: IA
+    Policy:
+      - Actions:
+          - oss:PutObject
+        Effect: Deny
+        Principal:
+          - 1234567890
+        Resource:
+          - acs:oss:*:1234567890:*/*
+    Logging:
+      Enable: true/false
+      TargetBucket: TargetBucket
+      TargetPrefix: TargetPrefix
+    EncryptionRule:
+      SSEAlgorithm: AES256
+      KMSMasterKeyID: KMSMasterKeyID
+    Versioning: enable
+    Domains:
+      - Domain: anycodes.cn
+        AutoCname: true
+        PrivateKey: './certificates/privateKey.pem'
+        Certificate: './certificates/certificate.pem'
+    Website:
+      Pages:
+        Index: index.html
+        Error: error.html
+        SubDir:
+          Index: index.html
+          ErrorRuleType: 1
+      RoutingRules:
+        RuleNumber: 1
+        Condition:
+          KeyPrefixEquals: abc/
+          HttpErrorCodeReturnedEquals: 404
+          IncludeHeader:
+            Key: host
+            Equals: test.oss-cn-beijing-internal.aliyuncs.com
+          KeySuffixEquals: abc/
+        Redirect:
+          RedirectType: Mirror
+          PassQueryString: true
+          Mirror:
+            URL: http://www.test.com/
+            PassQueryString: true
+            FollowRedirect: true
+            CheckMd5: true
+            Headers: a
+              PassAll: true
+              Pass:
+                - myheader-key1
+                - myheader-key2
+              Remove:
+                - myheader-key3
+                - myheader-key4
+              Set:
+                Key: aa
+                Value: aa
+          Protocol: http
+          HostName: www.test.com
+          ReplaceKeyPrefixWith:
+          EnableReplacePrefix: def/
+          ReplaceKeyWith: prefix/${key}.suffix
+          HttpRedirectCode: 301
