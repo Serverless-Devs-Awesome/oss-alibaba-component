@@ -61,6 +61,20 @@ const doConfig = async(params) => {
   }
   // console.log(tags)
   await oss.putBucketTags(bucket, tags)
+
+  // CORS
+  await oss.deleteBucketCORS(bucket)
+  let options = []
+  for (const c of params.cors) {
+    options.push({
+        allowedOrigin : c.AllowedOrigin,
+        allowedHeader : c.AllowedHeader,
+        allowedMethod : c.AllowedMethod,
+        exposeHeader : c.ExposeHeader,
+        maxAgeSeconds : c.MaxAgeSeconds,
+        responseVary : c.ResponseVary,})
+  }
+  await oss.putBucketCORS(bucket, options)
 }
 
 const doObject = async(inputParams) => {

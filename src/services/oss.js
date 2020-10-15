@@ -73,6 +73,24 @@ class OssClient {
   async uploadFile (filePath, object) {
     await this.ossClient.put(object, filePath)
   }
+
+
+  async putBucketCORS (bucket, options) {
+    try {
+      await this.ossClient.putBucketCORS(bucket, options).then((result) => {});
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async deleteBucketCORS(bucket) {
+    try {
+      await this.ossClient.deleteBucketCORS(bucket)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
 }
 
 module.exports = OssClient
