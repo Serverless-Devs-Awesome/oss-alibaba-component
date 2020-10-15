@@ -1,7 +1,6 @@
-OSSDemoComponent:
-  Component: /Users/xianbintang/workspace/oss-alibaba/src
+OSSComponent:
+  Component: oss
   Provider: alibaba
-  Access: edas_beta_test
   Properties:
     Region: 'cn-hangzhou'
     Bucket: MybucketName
@@ -101,7 +100,7 @@ OSSDemoComponent:
             PassQueryString: true
             FollowRedirect: true
             CheckMd5: true
-            Headers:
+            Headers: a
               PassAll: true
               Pass:
                 - myheader-key1
@@ -116,6 +115,5 @@ OSSDemoComponent:
           HostName: www.test.com
           ReplaceKeyPrefixWith:
           EnableReplacePrefix: def/
-          # fixme 修复语法
-#          ReplaceKeyWith: prefix/${key}.suffix
+          ReplaceKeyWith: prefix/${key}.suffix
           HttpRedirectCode: 301
