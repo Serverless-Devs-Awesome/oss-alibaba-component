@@ -16,7 +16,9 @@ OSSDemoComponent:
         - path2
     Tags:
       - Key: aa
-        Vaule: bbb
+        Value: bbb
+      - Key: cc
+        Value: ddd
     StorageClass: standard
     DataRedundancyType: LRS
     Cors:

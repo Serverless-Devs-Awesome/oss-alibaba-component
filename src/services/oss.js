@@ -40,6 +40,35 @@ class OssClient {
     }
   }
 
+  // 设置Bucket标签
+  async putBucketTags(bucketName, tag) {
+    try {
+      let result = await this.ossClient.putBucketTags(bucketName, tag);
+      // console.log(result)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  //获取Bucket标签
+  async getBucketTags(bucketName) {
+    try {
+      let result = await this.ossClient.getBucketTags(bucketName);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // 删除Bucket标签
+  async deleteBucketTags(bucketName) {
+    try {
+      let result = await this.ossClient.deleteBucketTags(bucketName);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   async uploadFile (filePath, object) {
     await this.ossClient.put(object, filePath)

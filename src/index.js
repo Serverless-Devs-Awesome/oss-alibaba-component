@@ -52,7 +52,7 @@ class OSSComponent extends Component {
       credentials, state, args, properties,
       region, bucket, codeUri, tags, storageClass,
       cors, referer, acl, lifecycle, policy, logging,
-      encryptionRule, versioning, domains, website
+      encryptionRule, versioning, domains, website, dataRedundancyType
     }
   }
 }
