@@ -25,6 +25,7 @@
     "@serverless-devs/s-core": "0.0.10"
   },
   "dependencies": {
+    "ali-oss": "^6.11.2",
     "colors": "^1.4.0",
     "fs-extra": "^9.0.1"
   }

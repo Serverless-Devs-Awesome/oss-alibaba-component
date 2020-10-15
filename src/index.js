@@ -28,8 +28,31 @@ class OSSComponent extends Component {
     const state = inputs.State || {}
     const args = this.args(inputs.Args)
 
+    const region = properties.Region || {}
+    const bucket = properties.Bucket|| {}
+    const codeUri = properties.codeUri || {}
+    const tags = properties.Tags || {}
+
+    const storageClass = properties.StorageClass || {}
+    const cors = properties.Cors || {}
+    const referer = properties.Referer || {}
+    const acl = properties.Acl || {}
+    const dataRedundancyType = properties.DataRedundancyType|| {}
+    const lifecycle = properties.Lifecycle || {}
+
+    const policy = properties.Policy || {}
+    const logging = properties.Logging || {}
+    const encryptionRule = properties.EncryptionRule || {}
+    const versioning = properties.Versioning || {}
+
+    const domains = properties.Domains || {}
+    const website = properties.Website || {}
+
     return {
-      credentials, state, args, properties
+      credentials, state, args, properties,
+      region, bucket, codeUri, tags, storageClass,
+      cors, referer, acl, lifecycle, policy, logging,
+      encryptionRule, versioning, domains, website
     }
   }
 }
