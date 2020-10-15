@@ -1,0 +1,31 @@
+{
+  "name": "@serverless-tool/oss",
+  "version": "0.0.1",
+  "description": "通过本组件，您可以简单快速使用阿里云OSS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serverless-Devs/oss-alibaba.git"
+  },
+  "keywords": [
+    "serverless",
+    "oss",
+    "alibaba"
+  ],
+  "author": "Xianbin Tang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Serverless-Devs/oss-alibaba/issues"
+  },
+  "homepage": "https://github.com/Serverless-Devs/oss-alibaba#readme",
+  "devDependencies": {
+    "@serverless-devs/s-core": "0.0.10"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "fs-extra": "^9.0.1"
+  }
+}
