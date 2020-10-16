@@ -218,6 +218,33 @@ class OssClient {
     const result = await this.ossClient.putBucketVersioning(bucket, status);
     // console.log(result);
   }
+  async putBucketWebsite (bucket, options) {
+    try {
+      let result = await this.ossClient.putBucketWebsite(bucket, options);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getBucketWebsite(bucket) {
+    try {
+      let result = await this.ossClient.getBucketWebsite(bucket);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async deleteBucketWebsite(bucket) {
+    try {
+      let result = await this.ossClient.deleteBucketWebsite(bucket);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 }
 
 module.exports = OssClient

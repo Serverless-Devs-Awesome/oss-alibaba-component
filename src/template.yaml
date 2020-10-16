@@ -83,44 +83,41 @@ OSSDemoComponent:
         PrivateKey: './certificates/privateKey.pem'
         Certificate: './certificates/certificate.pem'
     Website:
-      Pages:
-        Index: index.html
-        Error: error.html
-        SubDir:
-          Index: index.html
-          ErrorRuleType: 1
-      RoutingRules:
-        RuleNumber: 1
-        Condition:
-          KeyPrefixEquals: abc/
-          HttpErrorCodeReturnedEquals: 404
-          IncludeHeader:
-            Key: host
-            Equals: test.oss-cn-beijing-internal.aliyuncs.com
-          KeySuffixEquals: abc/
-        Redirect:
-          RedirectType: Mirror
-          PassQueryString: true
-          Mirror:
-            URL: http://www.test.com/
-            PassQueryString: true
-            FollowRedirect: true
-            CheckMd5: true
-            Headers:
-              PassAll: true
-              Pass:
-                - myheader-key1
-                - myheader-key2
-              Remove:
-                - myheader-key3
-                - myheader-key4
-              Set:
-                Key: aa
-                Value: aa
-          Protocol: http
-          HostName: www.test.com
-          ReplaceKeyPrefixWith:
-          EnableReplacePrefix: def/
-          # fixme 修复语法
-#          ReplaceKeyWith: prefix/${key}.suffix
-          HttpRedirectCode: 301
+      Index: index.html
+      Error: error.html
+      SupportSubDir: true
+      Type: 0 # 0: Redirect 1: NoSuchKey 2: Index
+#      RoutingRules:
+#        - RuleNumber: 1
+#          Condition:
+#            KeyPrefixEquals: abc/
+#            HttpErrorCodeReturnedEquals: 404
+#            IncludeHeader:
+#              Key: host
+#              Equals: test.oss-cn-beijing-internal.aliyuncs.com
+#            KeySuffixEquals: abc/
+#          Redirect:
+#            RedirectType: External
+#            PassQueryString: true
+#            MirrorURL: http://www.test.com/
+#            MirrorPassQueryString: true
+#            MirrorFollowRedirect: true
+#            MirrorCheckMd5: true
+#            MirrorHeaders:
+#              PassAll: true
+#              Pass:
+#                - myheader-key1
+#                - myheader-key2
+#              Remove:
+#                - myheader-key3
+#                - myheader-key4
+#              Set:
+#                Key: aa
+#                Value: aa
+#            Protocol: http
+#            HostName: www.test.com
+#            ReplaceKeyPrefixWith: abc/
+#            EnableReplacePrefix: def/
+            # fixme 修复语法
+#           ReplaceKeyWith: prefix/${key}.suffix
+#            HttpRedirectCode: 301

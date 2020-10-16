@@ -111,6 +111,13 @@ const doConfig = async(params) => {
   } else {
     await oss.putBucketVersioning(bucket, "Suspended")
   }
+
+  // website
+  if (params.website) {
+    let website = convertObjectKey(params.website)
+    // console.log(JSON.stringify(params.website))
+    await oss.putBucketWebsite(bucket, website)
+  }
 }
 
 const doObject = async(inputParams) => {
