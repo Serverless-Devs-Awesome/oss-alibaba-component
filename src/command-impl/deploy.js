@@ -97,6 +97,20 @@ const doConfig = async(params) => {
   } else {
     await oss.deleteBucketEncryption(bucket)
   }
+
+  // version
+  let versioning = params.versioning
+  if (versioning) {
+    if (versioning && versioning === "enable") {
+      await oss.putBucketVersioning(bucket, "Enabled")
+    } else if (versioning && versioning === "disable") {
+      await oss.putBucketVersioning(bucket, "Suspended")
+    } else {
+      console.log(red(`invalid versioning parameter: ${versioning}`))
+    }
+  } else {
+    await oss.putBucketVersioning(bucket, "Suspended")
+  }
 }
 
 const doObject = async(inputParams) => {

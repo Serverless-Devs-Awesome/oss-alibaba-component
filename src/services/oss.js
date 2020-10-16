@@ -209,6 +209,15 @@ class OssClient {
       console.log(e)
     }
   }
+
+  // 设置存储空间版本控制状态为Enabled或Suspended
+  async putBucketVersioning(bucket, status) {
+    const options ={
+      "status" : status,
+    } // `Enabled` or `Suspended`
+    const result = await this.ossClient.putBucketVersioning(bucket, status);
+    // console.log(result);
+  }
 }
 
 module.exports = OssClient
