@@ -53,46 +53,77 @@ const doConfig = async(params) => {
   }
 
   // tags
-  await oss.deleteBucketTags(bucket)
   let tagsList = params.tags
-  let tags = {}
-  for (const t of tagsList) {
-    tags[t.Key] = t.Value
+  if (isParamsExist(tagsList)) {
+    let tags = {}
+    for (const t of tagsList) {
+      tags[t.Key] = t.Value
+    }
+    // console.log(tags)
+    await oss.deleteBucketTags(bucket)
+    await oss.putBucketTags(bucket, tags)
+  } else {
+    await oss.deleteBucketTags(bucket)
   }
-  // console.log(tags)
-  await oss.putBucketTags(bucket, tags)
 
   // CORS
-  await oss.deleteBucketCORS(bucket)
-  let options = convertObjectKey(params.cors)
-  await oss.putBucketCORS(bucket, options)
+  let cors = params.cors
+  if (isParamsExist(cors)) {
+    let options = convertObjectKey(cors)
+    await oss.deleteBucketCORS(bucket)
+    await oss.putBucketCORS(bucket, options)
+  } else {
+    await oss.deleteBucketCORS(bucket)
+  }
 
   // Referer
-  await oss.deleteBucketReferer(bucket)
-  await oss.putBucketReferer(bucket, params.referer.AllowEmptyReferer, params.referer.List)
+  let referer = params.referer
+  if (isParamsExist(referer)) {
+    await oss.deleteBucketReferer(bucket)
+    await oss.putBucketReferer(bucket, referer.AllowEmptyReferer, referer.List)
+  } else {
+    await oss.deleteBucketReferer(bucket)
+  }
 
   // acl
-  await oss.putBucketACL(bucket, params.acl)
+  if (isParamsExist(params.acl)) {
+    await oss.putBucketACL(bucket, params.acl)
+  } else {
+    await oss.putBucketACL(bucket, "private")
+  }
 
   // lifecycle
-  let lifecycle = []
-  for (const lc of params.lifecycle) {
-    lifecycle.push(convertObjectKey(lc))
+  if (isParamsExist(params.lifecycle)) {
+    let lifecycle = []
+    for (const lc of params.lifecycle) {
+      lifecycle.push(convertObjectKey(lc))
+    }
+    // console.log(JSON.stringify(lifecycle))
+    await oss.deleteBucketLifecycle(bucket)
+    await oss.putBucketLifecycle(bucket, lifecycle)
+  } else {
+    await oss.deleteBucketLifecycle(bucket)
   }
-  console.log(JSON.stringify(lifecycle))
-  await oss.deleteBucketLifecycle(bucket)
-  await oss.putBucketLifecycle(bucket, lifecycle)
 
   // logging
   let logging = params.logging
-  await oss.deleteBucketLogging(bucket)
-  if (logging.Enable === true) {
-    await oss.putBucketLogging(bucket, logging.TargetPrefix)
+  if (isParamsExist(logging)) {
+    if (validateBoolParam(logging.Enable)){
+      if (logging.Enable === true) {
+        await oss.putBucketLogging(bucket, logging.TargetPrefix)
+      } else {
+        await oss.deleteBucketLogging(bucket)
+      }
+    } else {
+      console.log(red(`parameter invalid for logging, logging.Enable: ${logging.Enable} invalid`))
+    }
+  } else {
+    await oss.deleteBucketLogging(bucket)
   }
 
   // encryption
   let encryption = params.encryptionRule
-  if (encryption) {
+  if (isParamsExist(encryption)) {
     await oss.putBucketEncryption(bucket, encryption)
   } else {
     await oss.deleteBucketEncryption(bucket)
@@ -100,11 +131,13 @@ const doConfig = async(params) => {
 
   // version
   let versioning = params.versioning
-  if (versioning) {
-    if (versioning && versioning === "enable") {
-      await oss.putBucketVersioning(bucket, "Enabled")
-    } else if (versioning && versioning === "disable") {
-      await oss.putBucketVersioning(bucket, "Suspended")
+  if (isParamsExist(versioning)) {
+    if (validateEnabledParam(versioning)) {
+      if (versioning === "enable") {
+        await oss.putBucketVersioning(bucket, "Enabled")
+      } else if (versioning === "disable") {
+        await oss.putBucketVersioning(bucket, "Suspended")
+      }
     } else {
       console.log(red(`invalid versioning parameter: ${versioning}`))
     }
@@ -113,10 +146,13 @@ const doConfig = async(params) => {
   }
 
   // website
-  if (params.website) {
-    let website = convertObjectKey(params.website)
+  let website = params.website
+  if (isParamsExist(website)) {
+    website = convertObjectKey(params.website)
     // console.log(JSON.stringify(params.website))
     await oss.putBucketWebsite(bucket, website)
+  } else {
+    await oss.deleteBucketWebsite(bucket)
   }
 }
 
@@ -145,6 +181,19 @@ function convertObjectKey(obj) {
     }
   }
 }
+
+function isParamsExist(params) {
+  return JSON.stringify(params) !== "{}"
+}
+
+function validateEnabledParam(params) {
+  return !params || (params === "enable" || params === "disable")
+}
+
+function validateBoolParam(params) {
+  return !params || (params === true || params === false)
+}
+
 
 module.exports = {
   deployImpl: deploy

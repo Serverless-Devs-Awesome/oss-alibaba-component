@@ -22,6 +22,20 @@ OSSDemoComponent:
       - Key: cc
         Value: ddd
     Cors:
+#      - AllowedOrigin:
+#          - http://www.c.com
+#          - http://www.d.com
+#        AllowedMethod:
+#          - POST
+#          - GET
+#          - HEAD
+#        AllowedHeader:
+#          - Authorization
+#        ExposeHeader:
+#          - x-oss-test3
+#          - x-oss-test4
+#        MaxAgeSeconds: 200
+#        ResponseVary: false
       - AllowedOrigin:
           - http://www.a.com
           - http://www.b.com
@@ -36,21 +50,22 @@ OSSDemoComponent:
         MaxAgeSeconds: 100
         ResponseVary: true
     Referer:
-      AllowEmptyReferer: false
+      AllowEmptyReferer: true
       List:
         - http://www.aliyun.com
         - http://www.prettyzxx.com
+        - http://www.hello.com
     Acl: public-read # public-read-write/private/public-read
     Lifecycle:
       - Id: 'rule1'
         Prefix: 'foo/'
         Status: 'Enabled'
-        Expiration:
-          Days: 21
-#        Transition:
-#          Days: 3
+#        Expiration:
+#          Days: 21
+        Transition:
+          Days: 3
 #          CreatedBeforeDate: '2020-10-18T00:00:00.000Z'
-#          StorageClass: 'IA'
+          StorageClass: 'IA'
 #        AbortMultipartUpload:
 #          Days: 3
 #          CreatedBeforeDate: '2020-10-18T00:00:00.000Z'
@@ -75,7 +90,7 @@ OSSDemoComponent:
     EncryptionRule:
       SSEAlgorithm: KMS
       KMSMasterKeyID: KMSMasterKeyID
-    Versioning: disable
+    Versioning: enable
     # 未提供SDK API
     Domains:
       - Domain: anycodes.cn
