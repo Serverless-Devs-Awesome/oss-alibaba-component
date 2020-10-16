@@ -89,6 +89,14 @@ const doConfig = async(params) => {
   if (logging.Enable === true) {
     await oss.putBucketLogging(bucket, logging.TargetPrefix)
   }
+
+  // encryption
+  let encryption = params.encryptionRule
+  if (encryption) {
+    await oss.putBucketEncryption(bucket, encryption)
+  } else {
+    await oss.deleteBucketEncryption(bucket)
+  }
 }
 
 const doObject = async(inputParams) => {

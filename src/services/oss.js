@@ -181,6 +181,34 @@ class OssClient {
     }
   }
 
+  async putBucketEncryption(bucket, options) {
+    try {
+      // 配置Bucket加密方式
+      let result = await this.ossClient.putBucketEncryption(bucket, options);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getBucketEncryption(bucket) {
+    try {
+      let result = await this.ossClient.getBucketEncryption(bucket);
+      // console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async deleteBucketEncryption(bucket) {
+    try {
+      //删除Bucket的加密配置。
+      let result = await this.ossClient.deleteBucketEncryption(bucket)
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 
 module.exports = OssClient

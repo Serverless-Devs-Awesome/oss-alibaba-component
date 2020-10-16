@@ -73,7 +73,7 @@ OSSDemoComponent:
 #      TargetBucket: TargetBucket # nodejs 提供的sdk中，不支持指定targetBucket，只能使用自身bucket
       TargetPrefix: foo/
     EncryptionRule:
-      SSEAlgorithm: AES256
+      SSEAlgorithm: KMS
       KMSMasterKeyID: KMSMasterKeyID
     Versioning: enable
     Domains:
