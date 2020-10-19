@@ -30,7 +30,7 @@ class OSSComponent extends Component {
 
     const region = properties.Region || {}
     const bucket = properties.Bucket|| {}
-    const codeUri = properties.codeUri || {}
+    const codeUri = properties.CodeUri || {}
     const tags = properties.Tags || {}
 
     const storageClass = properties.StorageClass || {}

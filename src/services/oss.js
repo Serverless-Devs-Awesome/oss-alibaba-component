@@ -1,7 +1,9 @@
 const Oss = require('ali-oss')
+const fs = require('fs')
+const path = require('path')
 
 class OssClient {
-  constructor (credentials, region, bucketName) {
+  constructor(credentials, region, bucketName) {
     // if (!bucketName) {
     //   this.ossClient = new Oss({
     //     region: 'oss-' + region,
@@ -20,7 +22,7 @@ class OssClient {
   }
 
   async getBucketInfo(bucketName) {
-    console.log(bucketName)
+    // console.log(bucketName)
     try {
       return await this.ossClient.getBucketInfo(bucketName)
     } catch (error) {
@@ -70,14 +72,10 @@ class OssClient {
     }
   }
 
-  async uploadFile (filePath, object) {
-    await this.ossClient.put(object, filePath)
-  }
-
-
-  async putBucketCORS (bucket, options) {
+  async putBucketCORS(bucket, options) {
     try {
-      await this.ossClient.putBucketCORS(bucket, options).then((result) => {})
+      await this.ossClient.putBucketCORS(bucket, options).then((result) => {
+      })
     } catch (e) {
       console.log(e)
     }
@@ -139,7 +137,7 @@ class OssClient {
 
   async putBucketLifecycle(bucket, options) {
     try {
-     return await this.ossClient.putBucketLifecycle(bucket, options)
+      return await this.ossClient.putBucketLifecycle(bucket, options)
     } catch (e) {
       console.log(e)
     }
@@ -212,13 +210,14 @@ class OssClient {
 
   // 设置存储空间版本控制状态为Enabled或Suspended
   async putBucketVersioning(bucket, status) {
-    const options ={
-      "status" : status,
+    const options = {
+      "status": status,
     } // `Enabled` or `Suspended`
     const result = await this.ossClient.putBucketVersioning(bucket, status);
     // console.log(result);
   }
-  async putBucketWebsite (bucket, options) {
+
+  async putBucketWebsite(bucket, options) {
     try {
       let result = await this.ossClient.putBucketWebsite(bucket, options);
       // console.log(result);
@@ -245,6 +244,50 @@ class OssClient {
     }
   }
 
+
+  async uploadFile(target, local, includes, excludes) {
+    try {
+      let upload = true
+      // console.log(`local ${local}`)
+      for (const e of excludes) {
+        if (local.indexOf(e) === 0) {
+          // console.log(`exclude ${local}`)
+          upload = false
+        }
+      }
+      for (const i of includes) {
+        if (local.indexOf(i) === 0) {
+          // console.log(`include ${local}`)
+          upload = true
+        }
+      }
+      if (upload) {
+        let result = await this.ossClient.put(target, local)
+      }
+      // console.log(result)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async uploadFiles(objectPrefix, localDir, includes, excludes) {
+    let docs = fs.readdirSync(localDir)
+    for (const doc of docs) {
+      let localPath = localDir + '/' + doc
+      let targetPath = objectPrefix + '/' + doc
+      let st = fs.statSync(localPath)
+      // 判断是否为文件
+      if (st.isFile() && doc !== '.DS_Store') {
+        await this.uploadFile(targetPath, localPath, includes, excludes)
+        // console.log(_src+'是文件',_dist)
+      }
+      else if (st.isDirectory()) {
+        // console.log(_src+'是文件夹')
+        await this.uploadFiles(targetPath, localPath, includes, excludes)
+      }
+    }
+
+  }
 }
 
 module.exports = OssClient

@@ -9,13 +9,15 @@ OSSDemoComponent:
     DataRedundancyType: LRS
     #    CodeUri: 本地路径
     CodeUri:
-      Src: 本地路径
+      ObjectPrefix: ossprefix/test
+      LocalDir: ../test/
+      # 仅支持目录前缀模式匹配，例如 src/test/, src/test1/等形式
+      # 如果在Includes目录中，则一定会上传，否则判断是否被Exclude了，如果被Exclude，则不上传
       Excludes:
-        - path1
-        - path2
+        - ../test/testdir1/
+        - ../test/testdir2/
       Includes:
-        - path1
-        - path2
+        - ../test/testdir1/file1
     Tags:
       - Key: aa
         Value: bbb
@@ -54,7 +56,6 @@ OSSDemoComponent:
       List:
         - http://www.aliyun.com
         - http://www.prettyzxx.com
-        - http://www.hello.com
     Acl: public-read # public-read-write/private/public-read
     Lifecycle:
       - Id: 'rule1'
@@ -87,9 +88,9 @@ OSSDemoComponent:
       Enable: false # true/false
 #      TargetBucket: TargetBucket # nodejs 提供的sdk中，不支持指定targetBucket，只能使用自身bucket
       TargetPrefix: foo/
-    EncryptionRule:
-      SSEAlgorithm: KMS
-      KMSMasterKeyID: KMSMasterKeyID
+#    EncryptionRule:
+#      SSEAlgorithm: KMS
+#      KMSMasterKeyID: KMSMasterKeyID
     Versioning: enable
     # 未提供SDK API
     Domains:

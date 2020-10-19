@@ -35,6 +35,29 @@ const deploy = async (inputParams) => {
 
 }
 
+const doObject = async(params) => {
+  let codeUri = params.codeUri
+  if (isParamsExist(codeUri)) {
+    console.log("uploading object..")
+    let includes = []
+    for (const i of codeUri.Includes) {
+      includes.push(path.resolve(i))
+    }
+    let excludes = []
+    for (const e of codeUri.Excludes) {
+      excludes.push(e)
+    }
+    let localDir = codeUri.LocalDir
+    let objectPrefix = codeUri.ObjectPrefix
+
+    // console.log(includes)
+    // console.log(excludes)
+    localDir = path.resolve(localDir)
+    const oss = new OssClient(params.credentials, params.region, params.bucket)
+    await oss.uploadFiles(objectPrefix, localDir, includes, excludes)
+  }
+}
+
 const doConfig = async(params) => {
   const oss = new OssClient(params.credentials, params.region, "")
   let bucket = params.bucket
@@ -79,7 +102,6 @@ const doConfig = async(params) => {
   // Referer
   let referer = params.referer
   if (isParamsExist(referer)) {
-    await oss.deleteBucketReferer(bucket)
     await oss.putBucketReferer(bucket, referer.AllowEmptyReferer, referer.List)
   } else {
     await oss.deleteBucketReferer(bucket)
@@ -154,10 +176,6 @@ const doConfig = async(params) => {
   } else {
     await oss.deleteBucketWebsite(bucket)
   }
-}
-
-const doObject = async(inputParams) => {
-
 }
 
 function convertObjectKey(obj) {
