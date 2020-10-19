@@ -123,18 +123,14 @@ const doConfig = async(params) => {
 
   // logging
   let logging = params.logging
-  if (isParamsExist(logging)) {
-    if (validateBoolParam(logging.Enable)){
-      if (logging.Enable === true) {
-        await oss.putBucketLogging(bucket, logging.TargetPrefix)
-      } else {
-        await oss.deleteBucketLogging(bucket)
-      }
+  if (validateBoolParam(logging.Enable)){
+    if (logging.Enable === true) {
+      await oss.putBucketLogging(bucket, logging.TargetPrefix)
     } else {
-      console.log(red(`parameter invalid for logging, logging.Enable: ${logging.Enable} invalid`))
+      await oss.deleteBucketLogging(bucket)
     }
   } else {
-    await oss.deleteBucketLogging(bucket)
+    console.log(red(`parameter invalid for logging, logging.Enable: ${logging.Enable} invalid`))
   }
 
   // encryption
@@ -147,18 +143,14 @@ const doConfig = async(params) => {
 
   // version
   let versioning = params.versioning
-  if (isParamsExist(versioning)) {
-    if (validateEnabledParam(versioning)) {
-      if (versioning === "enable") {
-        await oss.putBucketVersioning(bucket, "Enabled")
-      } else if (versioning === "disable") {
-        await oss.putBucketVersioning(bucket, "Suspended")
-      }
+  if (validateEnabledParam(versioning)) {
+    if (versioning === "enable") {
+      await oss.putBucketVersioning(bucket, "Enabled")
     } else {
-      console.log(red(`invalid versioning parameter: ${versioning}`))
+      await oss.putBucketVersioning(bucket, "Suspended")
     }
   } else {
-    await oss.putBucketVersioning(bucket, "Suspended")
+    console.log(red(`invalid versioning parameter: ${JSON.stringify(versioning)}`))
   }
 
   // website
@@ -199,11 +191,11 @@ function isParamsExist(params) {
 }
 
 function validateEnabledParam(params) {
-  return !params || (params === "enable" || params === "disable")
+  return JSON.stringify(params) === "{}" || typeof(params) === "undefined" || !params || (params === "enable" || params === "disable")
 }
 
 function validateBoolParam(params) {
-  return !params || (params === true || params === false)
+  return JSON.stringify(params) === "{}" || typeof(params) === "undefined" || !params || (params === true || params === false)
 }
 
 

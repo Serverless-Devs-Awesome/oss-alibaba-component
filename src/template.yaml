@@ -91,7 +91,7 @@ OSSDemoComponent:
 #    EncryptionRule:
 #      SSEAlgorithm: KMS
 #      KMSMasterKeyID: KMSMasterKeyID
-    Versioning: enable
+#    Versioning: enable
     # 未提供SDK API
     Domains:
       - Domain: anycodes.cn
