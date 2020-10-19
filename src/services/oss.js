@@ -264,7 +264,7 @@ class OssClient {
       }
       if (upload) {
         let result = await this.ossClient.put(target, local)
-        console.log(green(`upload ${target} succeed`))
+        console.log(green(`upload to oss ${target} succeed`))
       }
       // console.log(result)
     } catch (e) {

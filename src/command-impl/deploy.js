@@ -11,28 +11,22 @@ const OssClient = require('../services/oss')
 
 // TODO check param for each config
 const deploy = async (inputParams) => {
-  const {
-    credentials, args,
-    region, bucket, codeUri, tags, storageClass,
-    cors, referer, acl, lifecycle, policy, logging,
-    encryptionRule, versioning, domains, website
-  } = inputParams
+  const { args } = inputParams
 
   const { Parameters: parameters = {} } = args
   const { config, object} = parameters
 
   if (config && object || (!config && !object)) {
-    console.log('deploy with config and object')
+    console.log('update config and object')
     await doConfig(inputParams)
     await doObject(inputParams)
   } else if (config) {
-    console.log('deploy with config')
+    console.log('update config')
     await doConfig(inputParams)
   } else if (object) {
-    console.log('deploy with object')
+    console.log('update object')
     await doObject(inputParams)
   }
-
 }
 
 const doObject = async(params) => {
