@@ -38,7 +38,7 @@ const deploy = async (inputParams) => {
 const doObject = async(params) => {
   let codeUri = params.codeUri
   if (isParamsExist(codeUri)) {
-    console.log("uploading object..")
+    console.log(blue(`uploading object...`))
     let includes = []
     for (const i of codeUri.Includes) {
       includes.push(path.resolve(i))

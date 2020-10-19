@@ -1,6 +1,7 @@
 const Oss = require('ali-oss')
 const fs = require('fs')
 const path = require('path')
+const { green, yellow, blue, red} = require('colors')
 
 class OssClient {
   constructor(credentials, region, bucketName) {
@@ -263,6 +264,7 @@ class OssClient {
       }
       if (upload) {
         let result = await this.ossClient.put(target, local)
+        console.log(green(`upload ${target} succeed`))
       }
       // console.log(result)
     } catch (e) {
