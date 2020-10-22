@@ -48,7 +48,11 @@ class OssClient {
       const result = await this.ossClient.deleteBucket(bucketName)
       // console.log(result)
     } catch (err) {
-      console.log(err)
+      if (err.code === "BucketNotEmpty") {
+        console.log(red("The bucket you tried to delete is not empty."))
+      } else {
+        console.log(err)
+      }
     }
   }
 
