@@ -43,6 +43,16 @@ class OssClient {
     }
   }
 
+  async deleteBucket(bucketName) {
+    try {
+      const result = await this.ossClient.deleteBucket(bucketName)
+      // console.log(result)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   // 设置Bucket标签
   async putBucketTags(bucketName, tag) {
     try {
@@ -167,14 +177,14 @@ class OssClient {
       let result = await this.ossClient.getBucketLogging(bucket)
       console.log(JSON.stringify(result.res.data.toString()))
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   async deleteBucketLogging(bucket) {
     try {
       let result = await this.ossClient.deleteBucketLogging(bucket)
-      // console.log(result);
+      // console.log(result)
     } catch (e) {
       console.log(e)
     }
@@ -183,19 +193,19 @@ class OssClient {
   async putBucketEncryption(bucket, options) {
     try {
       // 配置Bucket加密方式
-      let result = await this.ossClient.putBucketEncryption(bucket, options);
-      // console.log(result);
+      let result = await this.ossClient.putBucketEncryption(bucket, options)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   async getBucketEncryption(bucket) {
     try {
-      let result = await this.ossClient.getBucketEncryption(bucket);
-      // console.log(result);
+      let result = await this.ossClient.getBucketEncryption(bucket)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
@@ -214,34 +224,34 @@ class OssClient {
     const options = {
       "status": status,
     } // `Enabled` or `Suspended`
-    const result = await this.ossClient.putBucketVersioning(bucket, status);
-    // console.log(result);
+    const result = await this.ossClient.putBucketVersioning(bucket, status)
+    // console.log(result)
   }
 
   async putBucketWebsite(bucket, options) {
     try {
-      let result = await this.ossClient.putBucketWebsite(bucket, options);
-      // console.log(result);
+      let result = await this.ossClient.putBucketWebsite(bucket, options)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   async getBucketWebsite(bucket) {
     try {
-      let result = await this.ossClient.getBucketWebsite(bucket);
-      // console.log(result);
+      let result = await this.ossClient.getBucketWebsite(bucket)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
   async deleteBucketWebsite(bucket) {
     try {
-      let result = await this.ossClient.deleteBucketWebsite(bucket);
-      // console.log(result);
+      let result = await this.ossClient.deleteBucketWebsite(bucket)
+      // console.log(result)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 

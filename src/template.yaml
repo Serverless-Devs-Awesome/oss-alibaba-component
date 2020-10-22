@@ -4,8 +4,8 @@ OSSDemoComponent:
   Access: edas_beta_test
   Properties:
     Region: 'cn-hangzhou'
-    Bucket: baiji-oss-test
-    StorageClass: standard
+    Bucket: baiji-oss-test-2
+    StorageClass: Standard
     DataRedundancyType: LRS
     #    CodeUri: 本地路径
     CodeUri:
@@ -92,7 +92,7 @@ OSSDemoComponent:
 #      SSEAlgorithm: KMS
 #      KMSMasterKeyID: KMSMasterKeyID
 #    Versioning: enable
-    # 未提供SDK API
+    # OSS 未提供 Domains 相关的SDK API
     Domains:
       - Domain: anycodes.cn
         AutoCname: true
