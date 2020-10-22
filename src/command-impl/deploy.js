@@ -42,13 +42,17 @@ const doObject = async(params) => {
       excludes.push(e)
     }
     let localDir = codeUri.LocalDir
+    let prefix = ""
+    if (codeUri.ObjectPrefix) {
+      prefix = codeUri.ObjectPrefix
+    }
     let objectPrefix = codeUri.ObjectPrefix
 
     // console.log(includes)
     // console.log(excludes)
     localDir = path.resolve(localDir)
     const oss = new OssClient(params.credentials, params.region, params.bucket)
-    await oss.uploadFiles(objectPrefix, localDir, includes, excludes)
+    await oss.uploadFiles(prefix, localDir, includes, excludes)
   }
 }
 
