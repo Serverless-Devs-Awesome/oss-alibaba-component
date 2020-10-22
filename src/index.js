@@ -11,14 +11,14 @@ class OSSComponent extends Component {
   async deploy(inputs) {
     console.log(blue('OSS config deploying...'))
     await deployImpl(this.handlerInputs(inputs))
-    console.log(blue('OSS CDN config succeed'))
+    console.log(blue('OSS config succeed'))
   }
 
   // 移除操作
   async remove(inputs) {
     console.log(blue('OSS config removing...'))
     await removeImpl(this.handlerInputs(inputs))
-    console.log(blue('OSS CDN config succeed'))
+    console.log(blue('OSS config succeed'))
   }
 
   // 解析入参
