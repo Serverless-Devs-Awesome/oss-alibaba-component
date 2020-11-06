@@ -1,6 +1,6 @@
 {
   "name": "@serverless-tool/oss",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "通过本组件，您可以简单快速使用阿里云OSS",
   "main": "index.js",
   "scripts": {

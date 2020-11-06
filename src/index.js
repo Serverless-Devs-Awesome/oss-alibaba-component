@@ -93,8 +93,8 @@ class OSSComponent extends Component {
         const storageClass = properties.StorageClass || undefined
         const cors = properties.Cors || {}
         const referer = properties.Referer || {}
-        const acl = properties.Acl || {}
-        const dataRedundancyType = properties.DataRedundancyType || {}
+        const acl = properties.Acl || null
+        const dataRedundancyType = properties.DataRedundancyType || null
         const lifecycle = properties.Lifecycle || {}
 
         const policy = properties.Policy || {}
