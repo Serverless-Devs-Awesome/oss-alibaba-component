@@ -7,7 +7,7 @@
 
 ```yaml
 OSSDemoComponent:
-  Component:oss
+  Component: oss
   Provider: alibaba
   Properties:
     Region: 'cn-hangzhou'
