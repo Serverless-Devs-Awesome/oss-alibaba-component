@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Serverless-Devs/oss-alibaba#readme",
   "devDependencies": {
-    "@serverless-devs/s-core": "0.0.10"
+    "@serverless-devs/s-core": "^0.0.22"
   },
   "dependencies": {
     "ali-oss": "^6.11.2",

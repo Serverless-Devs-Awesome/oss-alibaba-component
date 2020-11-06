@@ -1,119 +1,515 @@
-OSSComponent:
-  Component: oss
-  Provider: alibaba
-  Properties:
-    Region: 'cn-hangzhou'
-    Bucket: MybucketName
-    #    CodeUri: 本地路径
-    CodeUri:
-      Src: 本地路径
-      Excludes:
-        - path1
-        - path2
-      Includes:
-        - path1
-        - path2
-    Tags:
-      - Key: aa
-        Vaule: bbb
-    StorageClass: standard
-    Cors:
-      - AllowedOrigin:
-          - http://www.a.com
-          - http://www.b.com
-        AllowedMethod:
-          - POST
-          - GET
-        AllowedHeader:
-          - Authorization
-        ExposeHeader:
-          - x-oss-test
-          - x-oss-test1
-        MaxAgeSeconds: 100
-        ResponseVary: true
-    Referer:
-      AllowEmptyReferer: true
-      List:
-        - http://www.aliyun.com
-    Acl: public-read-write
-    Lifecycle:
-      - ID: aa
-        Prefix: Prefix
-        Status: Status
-        Expiration:
-          Days: Days
-        Transition:
-          Days: Days
-          CreatedBeforeDate: CreatedBeforeDate
-          StorageClass: StorageClass
-        AbortMultipartUpload:
-          Days: Days
-          CreatedBeforeDate: CreatedBeforeDate
-        Tag:
-          - Key: Key
-            Value: Value
-        NoncurrentVersionTransition:
-          NoncurrentDays: 10
-          StorageClass: IA
-    Policy:
-      - Actions:
-          - oss:PutObject
-        Effect: Deny
-        Principal:
-          - 1234567890
-        Resource:
-          - acs:oss:*:1234567890:*/*
-    Logging:
-      Enable: true/false
-      TargetBucket: TargetBucket
-      TargetPrefix: TargetPrefix
-    EncryptionRule:
-      SSEAlgorithm: AES256
-      KMSMasterKeyID: KMSMasterKeyID
-    Versioning: enable
-    Domains:
-      - Domain: anycodes.cn
-        AutoCname: true
-        PrivateKey: './certificates/privateKey.pem'
-        Certificate: './certificates/certificate.pem'
-    Website:
-      Pages:
-        Index: index.html
-        Error: error.html
-        SubDir:
-          Index: index.html
-          ErrorRuleType: 1
-      RoutingRules:
-        RuleNumber: 1
-        Condition:
-          KeyPrefixEquals: abc/
-          HttpErrorCodeReturnedEquals: 404
-          IncludeHeader:
-            Key: host
-            Equals: test.oss-cn-beijing-internal.aliyuncs.com
-          KeySuffixEquals: abc/
-        Redirect:
-          RedirectType: Mirror
-          PassQueryString: true
-          Mirror:
-            URL: http://www.test.com/
-            PassQueryString: true
-            FollowRedirect: true
-            CheckMd5: true
-            Headers: a
-              PassAll: true
-              Pass:
-                - myheader-key1
-                - myheader-key2
-              Remove:
-                - myheader-key3
-                - myheader-key4
-              Set:
-                Key: aa
-                Value: aa
-          Protocol: http
-          HostName: www.test.com
-          ReplaceKeyPrefixWith:
-          EnableReplacePrefix: def/
-          ReplaceKeyWith: prefix/${key}.suffix
-          HttpRedirectCode: 301
+Type: Component
+Name: oss
+Provider:
+  - Alibaba
+Version: 0.0.1
+Description: 阿里云对象存储组件
+HomePage: https://www.aliyun.com/
+Tags:
+  - 函数计算
+Category: 基础云服务
+Commands:
+  deploy: 部署对象存储
+  remove: 移除对象存储
+Service:
+  对象存储:
+    Authorities:
+      - 对象存储全部权限
+Properties:
+  Region:
+    Description: 地域
+    Required: true
+    Type:
+      - Enum:
+          - cn-hangzhou
+          - cn-shanghai
+          - cn-qingdao
+          - cn-beijing
+          - cn-zhangjiakou
+          - cn-huhehaote
+          - cn-wulanchabu
+          - cn-shenzhen
+          - cn-heyuan
+          - cn-guangzhou
+          - cn-chengdu
+          - cn-hongkong
+          - us-west-1
+          - us-east-1
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-southeast-3
+          - ap-southeast-5
+          - ap-northeast-1
+          - ap-south-1
+          - eu-central-1
+          - eu-west-1
+          - me-east-1
+  Bucket:
+    Description: 存储桶名称
+    Required: true
+    Type:
+      - String
+  CodeUri:
+    Description: 本地路径
+    Required: true
+    Type:
+      - String[简单配置]
+      - Struct[复杂配置]:
+          Src:
+            Description: 本地路径
+            Required: true
+            Type:
+              - String
+          Excludes:
+            Description: 不包含某些文件（不支持通配符）
+            Required: true
+            Type:
+              - List<String>
+          Includes:
+            Description: 额外包含某些文件（不支持通配符）
+            Required: true
+            Type:
+              - List<String>
+  Tags:
+    Required: false
+    Description: 标签配置
+    Type:
+      - List<Struct>:
+          Key:
+            Required: true
+            Description: 标签名
+            Type:
+              - String
+          Value:
+            Required: true
+            Description: 标签值
+            Type:
+              - String
+  StorageClass:
+    Required: false
+    Description: 指定Bucket的存储类型
+    Type:
+      - Enum:
+          - Standard
+          - IA
+          - Archive
+          - ColdArchive
+  Cors:
+    Required: false
+    Description: 跨域资源共享
+    Type:
+      - List<Struct>:
+          AllowedOrigin:
+            Required: true
+            Description: 指定允许的跨域请求来源。OSS允许使用多个元素来指定多个允许的来源。OSS仅允许使用一个星号（*）通配符。如果指定为星号（*），则表示允许所有来源的跨域请求。
+            Type:
+              - List<String>
+          AllowedMethod:
+            Required: true
+            Description: 指定允许的跨域请求方法。
+            Type:
+              - List<Enum>:
+                  - GET
+                  - PUT
+                  - DELETE
+                  - POST
+                  - HEAD
+          AllowedHeader:
+            Required: false
+            Description: 控制OPTIONS预取指令Access-Control-Request-Headers中指定的Header是否被允许。
+            Type:
+              - List<String>
+          ExposeHeader:
+            Required: false
+            Description: 指定允许用户从应用程序中访问的响应头。例如，一个Javascript的XMLHttpRequest对象。
+            Type:
+              - List<String>
+          MaxAgeSeconds:
+            Required: false
+            Description: 指定浏览器对特定资源的预取（OPTIONS）请求返回结果的缓存时间。单位为秒。
+            Type:
+              - Number
+          ResponseVary:
+            Required: false
+            Description: 是否返回Vary:Origin头。
+            Type:
+              - Boolean
+  Referer:
+    Required: false
+    Description: 设置存储空间（Bucket）的防盗链（Referer）。
+    Type:
+      - Struct:
+          AllowEmptyReferer:
+            Required: true
+            Description: 指定是否允许Referer字段为空的请求访问。
+            Type:
+              - Boolean
+          List:
+            Required: true
+            Description: 指定Referer访问白名单。
+            Type:
+              - List<String>
+  Acl:
+    Required: true
+    Description: 存储空间（Bucket）的访问权限（ACL）。
+    Type:
+      - Enum:
+          - public-read-write
+          - public-read
+          - private
+  Lifecycle:
+    Required: true
+    Description: 存储空间（Bucket）的生命周期规则。生命周期规则开启后，OSS将按照配置规则指定的时间，自动转换与规则相匹配的文件（Object）的存储类型或将其删除。
+    Type:
+      - List<Struct>:
+          Id:
+            Required: false
+            Description: 标识规则的唯一ID。最多由255个字节组成。如没有指定，或者该值为空时，OSS会自动生成一个唯一ID。
+            Type:
+              - String
+          Prefix:
+            Required: true
+            Description: 指定规则所适用的前缀（Prefix）。Prefix不可重复。
+            Type:
+              - String
+          Status:
+            Required: true
+            Description: 如果值为Enabled，那么OSS会定期执行该规则；如果为Disabled，那么OSS会忽略该规则。
+            Type:
+              - Enum:
+                  - Enabled
+                  - Disabled
+          Expiration:
+            Required: true
+            Description: 指定Object生命周期规则的过期属性。
+            Type:
+              - Struct:
+                  Days:
+                    Required: false
+                    Description: 指定生命周期规则在距离Object最后更新多少天后生效。
+                    Type:
+                      - Number
+          Transition:
+            Required: false
+            Description: 指定Object在有效生命周期中，OSS何时将Object转储为IA、Archive和ColdArchive存储类型 。
+            Type:
+              - Struct:
+                  Days:
+                    Required: false
+                    Description: 指定生命周期规则在距离Object最后更新多少天后生效。
+                    Type:
+                      - Number
+                  StorageClass:
+                    Required: false
+                    Description: 指定Object转储的存储类型。
+                    Type:
+                      - Enum:
+                          - IA
+                          - Archive
+                          - ColdArchive
+          AbortMultipartUpload:
+            Required: false
+            Description: 指定未完成分片上传的过期属性。
+            Type:
+              - Struct:
+                  Days:
+                    Required: false
+                    Description: 指定生命周期规则在距离Object最后更新多少天后生效。
+                    Type:
+                      - Number
+                  CreatedBeforeDate:
+                    Required: false
+                    Description: 指定一个日期，OSS会对最后更新时间早于该日期的数据执行生命周期规则。日期必须服从ISO8601的格式，并总是UTC的零点。 例如：2002-10-11T00:00:00.000Z，表示将最后更新时间早于2002-10-11T00:00:00.000Z 的Object删除或转换成其他存储类型，等于或晚于这个时间的Object不会被删除或转储。
+                    Type:
+                      - String
+          Tag:
+            Required: false
+            Description: 指定规则所适用的对象标签，可设置多个。
+            Type:
+              - List<Struct>:
+                  Key:
+                    Required: true
+                    Description: 标签名
+                    Type:
+                      - String
+                  Value:
+                    Required: true
+                    Description: 标签值
+                    Type:
+                      - String
+          NoncurrentVersionTransition:
+            Required: false
+            Description: 指定生命周期规则在Object成为非当前版本多少天后生效。
+            Type:
+              - Struct:
+                  NoncurrentDays:
+                    Required: false
+                    Description: 指定生命周期规则在Object成为非当前版本多少天后生效。
+                    Type:
+                      - Number
+                  StorageClass:
+                    Required: false
+                    Description: 指定Object转储的存储类型。
+                    Type:
+                      - Enum:
+                          - IA
+                          - Archive
+                          - ColdArchive
+  Policy:
+    Required: false
+    Description: 存储空间（Bucket）设置授权策略（Policy)。
+    Type:
+      - List<Struct>:
+          Actions:
+            Required: false
+            Description: 行为操作
+            Type:
+              - List<String>
+          Effect:
+            Required: false
+            Description: 效果、影响
+            Type:
+              - Enum:
+                  - Deny
+                  - Allow
+          Principal:
+            Required: false
+            Description: Principal配置
+            Type:
+              - List<String>
+          Resource:
+            Required: false
+            Description: 资源
+            Type:
+              - List<String>
+  Logging:
+    Required: false
+    Description: Logging配置
+    Type:
+      - Struct:
+          Enable:
+            Required: false
+            Description: 是否开启Logging
+            Type:
+              - Boolean
+          TargetPrefix:
+            Required: false
+            Description: 指定最终被保存的访问日志文件前缀。可以为空。
+            Type:
+              - String
+  EncryptionRule:
+    Required: false
+    Description: 配置存储空间（Bucket）的加密规则。
+    Type:
+      - Struct:
+          SSEAlgorithm:
+            Required: true
+            Description: 设置服务端默认加密方式。
+            Type:
+              - Enum:
+                  - KMS
+                  - AES256
+          KMSMasterKeyID:
+            Required: false
+            Description: 设置服务端默认加密方式。
+            Type:
+              - String
+  Versioning:
+    Required: false
+    Description: 存储空间（Bucket）的版本控制状态。
+    Type:
+      - Enum:
+          - enabled
+          - suspended
+  Website:
+    Required: false
+    Description: 将存储空间（Bucket）设置成静态网站托管模式并设置跳转规则（RoutingRule）。
+    Type:
+      - Struct:
+          Pages:
+            Required: true
+            Description: 页面配置
+            Type:
+              - Struct:
+                  Index:
+                    Required: true
+                    Description: 首页配置
+                    Type:
+                      - String
+                  Error:
+                    Required: false
+                    Description: 错误页面配置
+                    Type:
+                      - String
+                  SupportSubDir:
+                    Required: false
+                    Description: 子目录配置
+                    Type:
+                      - Boolean
+                  Type:
+                    Required: true
+                    Description: 表示设置了默认主页后，访问以非正斜线（/）结尾的Object，且该Object不存在时的行为。假设默认主页设置为index.html，访问的文件路径是bucket.oss-cn-hangzhou.aliyuncs.com/abc，且abc这个Object不存在，此时type三种取值类型对应的行为如下：0：检查abc/index.html是否存在（即Object + 正斜线（/）+ 主页的形式），如果存在则返回302，Location头为/abc/的URL编码（即正斜线（/） + Object + 正斜线（/）的形式），如果不存在则返回404，继续检查ErrorFile。1：直接返回404，报错NoSuchKey，继续检查ErrorFile。2：检查abc/index.html是否存在，如果存在则返回该Object的内容；如果不存在则返回404，继续检查ErrorFile。
+                    Type:
+                      - Enum:
+                          - 0
+                          - 1
+                          - 2
+          RoutingRules:
+            Required: false
+            Description: 路径规则
+            Type:
+              - List<Struct>:
+                  RuleNumber:
+                    Required: false
+                    Description: 匹配和执行RoutingRule的序号，OSS将按照此序号依次匹配规则。如果匹配成功，则执行此规则，后续的规则不再执行。
+                    Type:
+                      - Number
+                  Condition:
+                    Required: false
+                    Description: 匹配的条件
+                    Type:
+                      - Struct:
+                          KeyPrefixEquals:
+                            Required: false
+                            Description: 只有匹配此前缀的Object才能匹配此规则。
+                            Type:
+                              - String
+                          HttpErrorCodeReturnedEquals:
+                            Required: false
+                            Description: 访问指定Object时返回此status才能匹配此规则。当跳转规则是镜像回源类型时，此字段必须为404。
+                            Type:
+                              - String
+                          IncludeHeader:
+                            Required: false
+                            Description: 只有请求中包含了指定Header，且值为指定值时，才能匹配此规则。该容器最多可指定5个。
+                            Type:
+                              - List<Struct>:
+                                  Key:
+                                    Required: true
+                                    Description: 只有请求中包含了此Header，且值为Equals的指定值时，才能匹配此规则。
+                                    Type:
+                                      - String
+                                  Equals:
+                                    Required: true
+                                    Description: 只有请求中包含了Key指定的Header，且值为指定值时，才能匹配此规则。
+                                    Type:
+                                      - String
+                          KeySuffixEquals:
+                            Required: false
+                            Description: 只有匹配此字段指定的后缀才能匹配此规则。默认值为空，表示不匹配指定的后缀。
+                            Type:
+                              - String
+                  Redirect:
+                    Required: false
+                    Description: 跳转规则。
+                    Type:
+                      - Struct:
+                          RedirectType:
+                            Required: false
+                            Description: 指定跳转的类型。
+                            Type:
+                              - Enum:
+                                  - Mirror
+                                  - External
+                                  - Internal
+                                  - AliCDN
+                          PassQueryString:
+                            Required: false
+                            Description: 执行跳转或者镜像回源时，是否携带请求参数。
+                            Type:
+                              - Boolean
+                          Mirror:
+                            Required: false
+                            Description: Mirror配置
+                            Type:
+                              - Struct:
+                                  URL:
+                                    Required: false
+                                    Description: 仅在RedirectType为Mirror时生效，表示镜像回源的源站地址。
+                                    Type:
+                                      - String
+                                  PassQueryString:
+                                    Required: false
+                                    Description: 与PassQueryString作用相同，优先级高于PassQueryString。
+                                    Type:
+                                      - Boolean
+                                  FollowRedirect:
+                                    Required: false
+                                    Description: 如果镜像回源获取的结果是3xx，是否要继续跳转到指定的Location获取数据。
+                                    Type:
+                                      - Boolean
+                                  CheckMd5:
+                                    Required: false
+                                    Description: 是否检查回源body的MD5。当此项为true且源站返回的response中含有Content-Md5头时，OSS检查拉取的数据MD5是否与此Header匹配，如果不匹配，则不保存在OSS上。仅在RedirectType为Mirror时生效。
+                                    Type:
+                                      - Boolean
+                                  Headers:
+                                    Required: false
+                                    Description: 用于指定镜像回源时携带的Header。只有在RedirectType为Mirror时生效。
+                                    Type:
+                                      - Struct:
+                                          PassAll:
+                                            Required: false
+                                            Description: 是否透传除以下Header之外的其他Header到源站。
+                                            Type:
+                                              - Boolean
+                                          Pass:
+                                            Required: false
+                                            Description: 透传指定的Header到源站。
+                                            Type:
+                                              - String
+                                          Remove:
+                                            Required: false
+                                            Description: 禁止透传指定的Header到源站。
+                                            Type:
+                                              - String
+                                          Set:
+                                            Required: false
+                                            Description: 设置一个Header传到源站，不管请求中是否携带这些指定的Header，回源时都会设置这些Header。
+                                            Type:
+                                              - List<Struct>:
+                                                  Key:
+                                                    Required: false
+                                                    Description: 设置Header的key，最多1024个字节，字符集与Pass相同。
+                                                    Type:
+                                                      - String
+                                                  Value:
+                                                    Required: false
+                                                    Description: 设置Header的value，最多1024个字节，不能出现\r\n。
+                                                    Type:
+                                                      - String
+                          Protocol:
+                            Required: false
+                            Description: 跳转时的协议。
+                            Type:
+                              - Enum:
+                                  - http
+                                  - https
+                          HostName:
+                            Required: false
+                            Description: 跳转时的域名，需符合域名规范。
+                            Type:
+                              - String
+                          ReplaceKeyPrefixWith:
+                            Required: false
+                            Description: Redirect时Object名称的前缀将替换成该值。如果前缀为空，则将这个字符串插入Object 名称的前面。
+                            Type:
+                              - String
+                          EnableReplacePrefix:
+                            Required: false
+                            Description: 如果此字段设置为true，则Object的前缀将被替换为ReplaceKeyPrefixWith指定的值。如果未指定此字段或为空，则表示截断Object前缀。
+                            Type:
+                              - Boolean
+                          ReplaceKeyWith:
+                            Required: false
+                            Description: Redirect时Object名称将替换成ReplaceKeyWith指定的值，ReplaceKeyWith支持设置变量。目前支持的变量是${key}，表示该请求中的Object名称。
+                            Type:
+                              - String
+                          HttpRedirectCode:
+                            Required: false
+                            Description: 跳转时返回的状态码。仅在RedirectType为External或者AliCDN时生效。
+                            Type:
+                              - Enum:
+                                  - 301
+                                  - 302
+                                  - 307
